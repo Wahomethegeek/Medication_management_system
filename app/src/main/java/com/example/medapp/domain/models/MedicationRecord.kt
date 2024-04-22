@@ -1,4 +1,4 @@
-package com.example.medapp.domain
+package com.example.medapp.domain.models
 
 data class MedicationRecord(
     val medicationId: Int,

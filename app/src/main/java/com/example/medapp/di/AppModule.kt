@@ -3,7 +3,7 @@ package com.example.medapp.di
 import android.content.Context
 import androidx.room.Room
 import com.example.medapp.data.AppDatabase
-import com.example.medapp.data.MedicationRecordRepository
+import com.example.medapp.data.local.repository.MedicationRecordRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

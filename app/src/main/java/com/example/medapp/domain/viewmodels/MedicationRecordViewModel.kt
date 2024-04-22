@@ -1,11 +1,11 @@
-package com.example.medapp
+package com.example.medapp.domain.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medapp.data.MedicationEntity
-import com.example.medapp.data.MedicationRecordRepository
+import com.example.medapp.data.local.entities.MedicationEntity
+import com.example.medapp.data.local.repository.MedicationRecordRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -16,8 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.medapp.data.MedicationEntity
-import com.example.medapp.domain.MedicationRecord
+import com.example.medapp.data.local.entities.MedicationEntity
+import com.example.medapp.domain.models.MedicationRecord
+import com.example.medapp.domain.viewmodels.MedicationRecordViewModel
 import com.example.medapp.presentation.MedicationRecordItem
 import com.example.medapp.ui.theme.MedAppTheme
 import com.example.medapp.ui.theme.blueColor1

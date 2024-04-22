@@ -1,4 +1,4 @@
-package com.example.medapp.data
+package com.example.medapp.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

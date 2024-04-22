@@ -1,7 +1,6 @@
-package com.example.medapp.data
+package com.example.medapp.data.local.dao
 
-import com.example.medapp.data.MedicationEntity
-import com.example.medapp.data.MedicationRecordDao
+import com.example.medapp.data.local.entities.MedicationEntity
 
 /*
 
