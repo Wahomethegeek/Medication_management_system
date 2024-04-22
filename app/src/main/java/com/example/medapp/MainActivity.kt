@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.medapp.ui.theme.MedAppTheme
@@ -49,11 +52,18 @@ class MainActivity : ComponentActivity() {
                                 instructions = "Take twice a day",
                                 prescriptionDate = "2024-04-2",
                                 status = "Active"
-                            ))
+                            )
+                        )
                         // button to add medication
                         Button(onClick = {
                             val medicationRecord = MedicationEntity(
                                 // Populate medication data
+                                patientId = 123,
+                                drugName = "Cetrazine",
+                                dosage = "10 mg",
+                                administrationInstructions = "Take twice a day",
+                                prescriptionDate = "2024-04-22",
+                                status = "Active"
                             )
                             viewModel.addMedicationRecord(medicationRecord)
                         }) {
@@ -61,7 +71,8 @@ class MainActivity : ComponentActivity() {
                         }
 
                         // live data observation
-                        val addMedicationRecordResult by viewModel.addMedicationRecordResult.observeAsState()
+                        val addMedicationRecordResult by viewModel.addMedicationRecordResult.observeAsState(initial = false)
+
                         addMedicationRecordResult?.let { result ->
                             if (result) {
                                 // Medication added successfully
@@ -71,6 +82,7 @@ class MainActivity : ComponentActivity() {
                                 // You can show an error message or handle the failure case
                             }
                         }
+
 
                     }
                 }

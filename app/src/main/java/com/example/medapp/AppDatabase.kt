@@ -19,7 +19,7 @@ abstract class AppDatabase : RoomDatabase(){
                     context.applicationContext,
                     AppDatabase::class.java,
                     "MedicationRecords.db"
-                ).createFromAsset("/home/wahome/AndroidStudioProjects/MedApp/app/src/main/assets")
+                ).createFromAsset("MedicationRecords.db")
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
