@@ -1,0 +1,14 @@
+## Medication Android app ##
+
+  *****Creating UI*****
+1. Medication Record UI
+2. Patient Information UI
+3. Prescription Tracking UI
+4. Integrate Inventory management UI
+
+  *****CRUD Operations*****
+  1. ViewModel classes and connect to database
+    create viewmodel classes
+    create record repository
+    create record dao
+    create record entity
