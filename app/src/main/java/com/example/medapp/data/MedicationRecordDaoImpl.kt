@@ -1,4 +1,8 @@
-package com.example.medapp
+package com.example.medapp.data
+
+import com.example.medapp.data.MedicationEntity
+import com.example.medapp.data.MedicationRecordDao
+
 /*
 
 class MedicationRecordDaoImpl(private val appDatabase: AppDatabase) : MedicationRecordDao() {

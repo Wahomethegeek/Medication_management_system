@@ -1,7 +1,8 @@
-package com.example.medapp
+package com.example.medapp.data
 
 import androidx.room.Dao
 import androidx.room.Insert
+import com.example.medapp.data.MedicationEntity
 
 @Dao
 /*

@@ -1,4 +1,4 @@
-package com.example.medapp
+package com.example.medapp.domain
 
 data class Patient(
     val patientId: Int,

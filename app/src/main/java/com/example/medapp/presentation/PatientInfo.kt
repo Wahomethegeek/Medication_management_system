@@ -1,4 +1,4 @@
-package com.example.medapp
+package com.example.medapp.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,9 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.medapp.domain.Patient
 import com.example.medapp.ui.theme.OrangeColor6
-import com.example.medapp.ui.theme.PurpleColor4
-import com.example.medapp.ui.theme.blueColor1
 
 @Composable
 fun PatientInfo(patient: Patient){

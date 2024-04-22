@@ -2,6 +2,7 @@ package com.example.medapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.medapp.data.MedicationRecordRepository
 
 class MedicationRecordViewModelFactory(private val repository: MedicationRecordRepository) :
     ViewModelProvider.Factory {
