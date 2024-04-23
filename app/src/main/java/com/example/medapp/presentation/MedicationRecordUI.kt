@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,8 +56,11 @@ fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (Medicati
                     text = "Status: ${medicationRecord.status}",
                 )
             }
-            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { onDelete.invoke(medicationRecord)}) {
+            IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(medicationRecord)}) {
               Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
+            }
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+                Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
             }
         }
     }

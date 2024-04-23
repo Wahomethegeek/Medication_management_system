@@ -24,7 +24,6 @@ import com.example.medapp.presentation.drugs.DrugsPage
 import com.example.medapp.presentation.prescription.PrescriptionPage
 import com.example.medapp.presentation.patients.PatientsPage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigation(navController: NavController){
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }

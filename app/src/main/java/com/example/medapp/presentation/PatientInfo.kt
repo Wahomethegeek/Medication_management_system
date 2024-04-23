@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -58,8 +59,11 @@ fun PatientInfo(patient: Patient, onDelete: (Patient) -> Unit){
                 )
             }
 
-            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { onDelete.invoke(patient)}) {
+            IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(patient)}) {
                 Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
+            }
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+                Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
             }
         }
     }

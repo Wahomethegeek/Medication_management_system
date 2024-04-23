@@ -1,6 +1,9 @@
 package com.example.medapp.domain.models
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Assignment
+import androidx.compose.material.icons.automirrored.outlined.Assignment
+import androidx.compose.material.icons.filled.Assignment
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MedicalInformation
 import androidx.compose.material.icons.filled.Person
@@ -20,8 +23,8 @@ data class BottomNavigationItem(
         val bottomNavigationItems = listOf(
             BottomNavigationItem(
                 title = "Medications",
-                selectedIcon = Icons.Filled.Home,
-                unselectedIcon = Icons.Outlined.Home,
+                selectedIcon = Icons.AutoMirrored.Filled.Assignment,
+                unselectedIcon = Icons.AutoMirrored.Outlined.Assignment,
                 hasNews = false,
             ),
 
