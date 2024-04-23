@@ -14,5 +14,4 @@ data class MedicationEntity(
     val administrationInstructions: String,
     val prescriptionDate: String,
     val status: String
-
 )
