@@ -3,7 +3,6 @@ package com.example.medapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.foundation.background
@@ -14,18 +13,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.medapp.data.local.entities.MedicationEntity
+import com.example.medapp.domain.models.MedicationRecord
+import com.example.medapp.domain.viewmodels.MedicationRecordViewModel
+import com.example.medapp.presentation.MedicationRecordItem
 import com.example.medapp.ui.theme.MedAppTheme
 import com.example.medapp.ui.theme.blueColor1
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MedicationRecordViewModel by viewModels {
-        MedicationRecordViewModelFactory(MedicationRecordRepository(
-            AppDatabase.getInstance(this).medicationRecordDao()
-        ))
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,8 @@ class MainActivity : ComponentActivity() {
                         .background(color = blueColor1),
 
                 ) {
+
+                    val viewModel  = hiltViewModel<MedicationRecordViewModel>()
                     Column(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)

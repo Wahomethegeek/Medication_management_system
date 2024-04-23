@@ -12,53 +12,51 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.medapp.ui.theme.blueColor1
+import com.example.medapp.domain.models.Prescription
+import com.example.medapp.ui.theme.OrangeColor6
 
 @Composable
-fun InventoryItem(inventory: Inventory){
+fun PrescriptionItem(prescription: Prescription){
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .background(color = blueColor1),
+            .background(color = OrangeColor6),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ){
         Column (
             modifier = Modifier.padding(16.dp)
         ){
             Text(
-                text = "Medication ID: ${inventory.medicationId}",
+                text = "Prescription ID: ${prescription.patientId}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Stock Levels: ${inventory.stockLevels}",
+                text = "Patient ID: ${prescription.patientId}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Expiration Date: ${inventory.expDate}",
+                text = "Medication ID: ${prescription.medicationId}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Replenishment Needs: ${inventory.replenishmentNeeds}",
+                text = "Physician Name: ${prescription.physicianName}",
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Prescription Date: ${prescription.prescriptionDate}",
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Status: ${prescription.status}",
                 color = Color.White
             )
         }
     }
-}
-@Preview
-@Composable
-fun PreviewInventoryItemUI(){
-    val inventoryk = Inventory(
-        medicationId = 1,
-        stockLevels = 2,
-        expDate = "2024-06-12",
-        replenishmentNeeds = 23
-
-    )
-    InventoryItem(inventory = inventoryk)
 }

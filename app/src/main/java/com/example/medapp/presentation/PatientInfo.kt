@@ -1,4 +1,4 @@
-package com.example.medapp
+package com.example.medapp.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,51 +12,59 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.medapp.Prescription
+import com.example.medapp.domain.models.Patient
 import com.example.medapp.ui.theme.OrangeColor6
 
 @Composable
-fun PrescriptionItem(prescription: Prescription){
+fun PatientInfo(patient: Patient){
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .background(color = OrangeColor6),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .background(color = OrangeColor6),
+    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ){
         Column (
             modifier = Modifier.padding(16.dp)
         ){
             Text(
-                text = "Prescription ID: ${prescription.patientId}",
+                text = "Patient ID: ${patient.patientId}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Patient ID: ${prescription.patientId}",
+                text = "Name: ${patient.name}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Medication ID: ${prescription.medicationId}",
+                text = "Date of birth: ${patient.birthDate}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Physician Name: ${prescription.physicianName}",
+                text = "Phone Number: ${patient.phoneNo}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Prescription Date: ${prescription.prescriptionDate}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Status: ${prescription.status}",
+                text = "Email: ${patient.email}",
                 color = Color.White
             )
         }
     }
+}
+@Preview
+@Composable
+fun PreviewPatientItem(){
+    val patientInfo = Patient(
+        patientId = 123,
+        name = "Wahome",
+        birthDate = "2000-08-23",
+        phoneNo = "0719196535",
+        email = "kenwahome99@gmail.com"
+    )
+    PatientInfo(patient = patientInfo)
 }

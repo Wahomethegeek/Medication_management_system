@@ -1,11 +1,8 @@
 package com.example.medapp
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class Myapp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        // Add any initialization code here if needed
-    }
-}
 
+@HiltAndroidApp
+class Myapp : Application()

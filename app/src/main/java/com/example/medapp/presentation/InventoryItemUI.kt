@@ -1,4 +1,4 @@
-package com.example.medapp
+package com.example.medapp.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,44 +14,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.medapp.ui.theme.OrangeColor6
-import com.example.medapp.ui.theme.PurpleColor4
+import com.example.medapp.domain.models.Inventory
 import com.example.medapp.ui.theme.blueColor1
 
 @Composable
-fun PatientInfo(patient: Patient){
+fun InventoryItem(inventory: Inventory){
     Card(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .background(color = OrangeColor6),
-    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .background(color = blueColor1),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ){
         Column (
             modifier = Modifier.padding(16.dp)
         ){
             Text(
-                text = "Patient ID: ${patient.patientId}",
+                text = "Medication ID: ${inventory.medicationId}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Name: ${patient.name}",
+                text = "Stock Levels: ${inventory.stockLevels}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Date of birth: ${patient.birthDate}",
+                text = "Expiration Date: ${inventory.expDate}",
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Phone Number: ${patient.phoneNo}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Email: ${patient.email}",
+                text = "Replenishment Needs: ${inventory.replenishmentNeeds}",
                 color = Color.White
             )
         }
@@ -59,13 +53,13 @@ fun PatientInfo(patient: Patient){
 }
 @Preview
 @Composable
-fun PreviewPatientItem(){
-    val patientInfo = Patient(
-        patientId = 123,
-        name = "Wahome",
-        birthDate = "2000-08-23",
-        phoneNo = "0719196535",
-        email = "kenwahome99@gmail.com"
+fun PreviewInventoryItemUI(){
+    val inventoryk = Inventory(
+        medicationId = 1,
+        stockLevels = 2,
+        expDate = "2024-06-12",
+        replenishmentNeeds = 23
+
     )
-    PatientInfo(patient = patientInfo)
+    InventoryItem(inventory = inventoryk)
 }
