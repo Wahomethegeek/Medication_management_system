@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.medapp.domain.models.BottomNavigationItem
 import com.example.medapp.presentation.drugs.DrugsPage
-import com.example.medapp.presentation.home.HomePage
+import com.example.medapp.presentation.prescription.PrescriptionPage
 import com.example.medapp.presentation.patients.PatientsPage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,7 +84,7 @@ fun BottomNavigation(navController: NavController){
 
             when (selectedItemIndex) {
                 0 -> {
-                    HomePage(navController = navController)
+                    PrescriptionPage(navController = navController)
                 }
 
                 1 -> {

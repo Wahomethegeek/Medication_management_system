@@ -1,5 +1,6 @@
 package com.example.medapp.presentation.drugs
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.medapp.domain.viewmodels.DrugsViewModel
@@ -33,6 +35,7 @@ import com.example.medapp.utils.ResultStatus
 fun DrugsPage(navController: NavController){
     val drugsViewModel = hiltViewModel<DrugsViewModel>()
     val drugsState = drugsViewModel.drugsState.collectAsState().value
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -62,8 +65,12 @@ fun DrugsPage(navController: NavController){
                     }
                 }else{
                     LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                        items( drugsState.data){patient ->
-                            DrugInfo(drug = patient)
+                        items( drugsState.data){drug ->
+                            DrugInfo(drug = drug, onDelete = {dr ->
+                                drugsViewModel.deleteDrug(dr)
+                                Toast.makeText(context, "Drug deleted successfully", Toast.LENGTH_SHORT).show()
+
+                            })
                         }
                     }
                 }

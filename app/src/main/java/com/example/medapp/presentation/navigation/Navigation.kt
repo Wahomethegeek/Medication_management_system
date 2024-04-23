@@ -1,17 +1,16 @@
 package com.example.medapp.presentation.navigation
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.medapp.presentation.bottomNavigation.BottomNavigation
 import com.example.medapp.presentation.drugs.AddDrugsPage
 import com.example.medapp.presentation.drugs.DrugsPage
-import com.example.medapp.presentation.home.HomePage
+import com.example.medapp.presentation.prescription.PrescriptionPage
 import com.example.medapp.presentation.patients.AddPatientsPage
 import com.example.medapp.presentation.patients.PatientsPage
+import com.example.medapp.presentation.prescription.AddPrescriptionPage
 
 @Composable
 fun Navigation() {
@@ -29,7 +28,12 @@ fun Navigation() {
         composable(
             route = Screen.PrescriptionScreen.route
         ) {
-            HomePage(navController = navController)
+            PrescriptionPage(navController = navController)
+        }
+        composable(
+            route = Screen.AddPrescriptionScreen.route
+        ) {
+            AddPrescriptionPage(navController = navController)
         }
         composable(
             route = Screen.PatientScreen.route

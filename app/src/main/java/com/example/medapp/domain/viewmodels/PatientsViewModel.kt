@@ -44,4 +44,9 @@ class PatientsViewModel @Inject constructor(private val database: AppDatabase): 
             database.patientRecordDao().insertPatient(patient)
         }
     }
+    fun deletePatient(patient: Patient){
+        viewModelScope.launch {
+            database.patientRecordDao().deletePatient(patient)
+        }
+    }
 }

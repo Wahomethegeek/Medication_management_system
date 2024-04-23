@@ -1,4 +1,4 @@
-package com.example.medapp.presentation.drugs
+package com.example.medapp.presentation.prescription
 
 import android.widget.Toast
 import androidx.compose.foundation.border
@@ -20,14 +20,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.material3.SelectableDates
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,14 +36,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.medapp.domain.models.Drug
+import com.example.medapp.domain.models.MedicationRecord
+import com.example.medapp.domain.models.Patient
+import com.example.medapp.domain.models.TextFieldState
 import com.example.medapp.domain.viewmodels.DrugsViewModel
+import com.example.medapp.domain.viewmodels.MedicationRecordViewModel
+import com.example.medapp.domain.viewmodels.PatientsViewModel
 import com.example.medapp.presentation.common.AppButton
+import com.example.medapp.presentation.common.AppDropDown
 import com.example.medapp.presentation.common.AppTextField
 import com.example.medapp.utils.Utils
 import java.text.SimpleDateFormat
@@ -50,13 +56,25 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddDrugsPage(navController: NavController) {
+fun AddPrescriptionPage(navController: NavController){
     val context = LocalContext.current
-    val drugsViewModel = hiltViewModel<DrugsViewModel>()
-    var name by remember { mutableStateOf("") }
-    var expiryDate by remember { mutableStateOf(Utils.getDateOfBirth()) }
-    var quantity by remember { mutableStateOf("1") }
 
+    val medicationViewModel = hiltViewModel<MedicationRecordViewModel>()
+    val patientsViewModel = hiltViewModel<PatientsViewModel>()
+    val drugsViewModel = hiltViewModel<DrugsViewModel>()
+    val patientsState = patientsViewModel.patientsState.collectAsState().value
+    val drugsState = drugsViewModel.drugsState.collectAsState().value
+
+    val selectedPatient = remember {
+        mutableStateOf<Patient?>(null)
+    }
+    val selectedDrug = remember {
+        mutableStateOf<Drug?>(null)
+    }
+
+    var dosage by remember { mutableStateOf("") }
+    var prescriptionDate by remember { mutableStateOf(Utils.getDateOfBirth()) }
+    var instructions by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
     val dateOfBirthMillis = runCatching {
         SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(Utils.getDateOfBirth())?.time
@@ -64,7 +82,7 @@ fun AddDrugsPage(navController: NavController) {
     }.getOrDefault(0L)
 
     val selectedDateOfBirthMillis = runCatching {
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(expiryDate)?.time
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(prescriptionDate)?.time
             ?: 0L
     }.getOrDefault(0L)
 
@@ -72,7 +90,7 @@ fun AddDrugsPage(navController: NavController) {
         initialSelectedDateMillis = selectedDateOfBirthMillis,
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis >= dateOfBirthMillis
+                return utcTimeMillis <= dateOfBirthMillis
 
             }
         }
@@ -95,7 +113,7 @@ fun AddDrugsPage(navController: NavController) {
                     onClick = {
                         selectedTimestamp.longValue =
                             datePickerState.selectedDateMillis ?: dateOfBirthMillis
-                        expiryDate = Utils.convertMillisToDate(selectedTimestamp.longValue)
+                        prescriptionDate = Utils.convertMillisToDate(selectedTimestamp.longValue)
                         showDatePicker = false
                     }
                 ) {
@@ -113,15 +131,11 @@ fun AddDrugsPage(navController: NavController) {
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navController.navigateUp()
-                        },
-                    ) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(imageVector = Icons.Default.Close, contentDescription = "Back")
                     }
                 },
-                title = { Text(text = "Add Drug") })
+                title = { Text(text = "Add Prescription") })
         }
     ) { paddingValues ->
         LazyColumn(
@@ -129,30 +143,83 @@ fun AddDrugsPage(navController: NavController) {
                 .padding(paddingValues)
                 .padding(horizontal = 10.dp)
         ) {
+            patientsState.data?.let {
+                item {
+                    Text(text = "Patient")
+                    AppDropDown(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                        options = it,
+                        selectedOption = TextFieldState(selectedPatient.value?.name ?: "Select a patient"),
+                        onOptionSelected = { patient ->
+                            selectedPatient.value = patient
+                        },
+                        textStyle = MaterialTheme.typography.titleSmall.copy(
+                            fontSize = 16.sp
+                        ),
+                        content = { patient ->
+                            Text(
+                                text = patient.name,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        },
+                    )
+                }
+            }
+
+
+            drugsState.data?.let {
+                item {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(text = "Prescription date")
+                    AppDropDown(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp),
+                        options = it,
+                        selectedOption = TextFieldState(selectedDrug.value?.name ?: "Select a drug"),
+                        onOptionSelected = { drug ->
+                            selectedDrug.value = drug
+                        },
+                        textStyle = MaterialTheme.typography.titleSmall.copy(
+                            fontSize = 16.sp
+                        ),
+                        content = { drug ->
+                            Text(
+                                text = drug.name,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        },
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
+
             item {
                 AppTextField(
-                    label = "Name",
-                    value = name,
-                    placeholder = "Enter drug name",
+                    label = "Dosage",
+                    value = dosage,
+                    placeholder = "Enter dosage for this medicine",
                     error = null,
-                    onValueChanged = { patientName -> name = patientName },
+                    onValueChanged = { patientName -> dosage = patientName },
                     keyboardType = KeyboardType.Text
                 )
             }
             item {
                 AppTextField(
-                    label = "Quantity",
-                    value = quantity,
-                    placeholder = "Enter Drug Quantity",
+                    label = "Instructions",
+                    value = instructions,
+                    placeholder = "Enter instructions",
                     error = null,
-                    onValueChanged = { qty -> quantity = qty },
-                    keyboardType = KeyboardType.Number
+                    onValueChanged = { patientEmail -> instructions = patientEmail },
+                    keyboardType = KeyboardType.Email
                 )
             }
 
             item {
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(text = "Expiry date")
+                Text(text = "Prescription date")
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -172,7 +239,7 @@ fun AddDrugsPage(navController: NavController) {
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Text(
-                        text = expiryDate,
+                        text = prescriptionDate,
                         modifier = Modifier.padding(start = 10.dp)
                     )
                 }
@@ -180,30 +247,29 @@ fun AddDrugsPage(navController: NavController) {
             }
 
             item {
-                AppButton(
-                    {
-                        drugsViewModel.insertDrug(
-                            Drug(
+                AppButton({
+                    if (selectedPatient.value == null){
+                        Toast.makeText(context, "Please select a patient first", Toast.LENGTH_SHORT).show()
+                    }else if(selectedDrug.value ==null){
+                        Toast.makeText(context, "Please select a drug first", Toast.LENGTH_SHORT).show()
+                    } else{
+                        medicationViewModel.addMedicationRecord(
+                            MedicationRecord(
                                 id = null,
-                                name = name,
-                                expiryDate = expiryDate,
-                                quantity = quantity.toLong(),
-                                initialQuantity = quantity.toLong()
+                                patientId = selectedPatient.value!!.id!!.toLong(),
+                                dosage = dosage,
+                                status = "Active",
+                                drugName = selectedDrug.value!!.name,
+                                instructions = instructions,
+                                prescriptionDate = prescriptionDate
                             )
                         )
                         navController.navigateUp()
-                        Toast.makeText(context, "Drug added successfully", Toast.LENGTH_SHORT)
-                            .show()
-                    },
-                    { Text("Add Drug") },
-                )
+                        Toast.makeText(context, "Medical record added successfully", Toast.LENGTH_SHORT).show()
+                    }
+
+                }, { Text("Add Record") })
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun AddDrugPreview() {
-    AddDrugsPage(navController = rememberNavController())
 }

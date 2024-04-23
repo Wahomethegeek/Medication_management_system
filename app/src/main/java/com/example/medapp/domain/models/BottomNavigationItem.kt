@@ -19,7 +19,7 @@ data class BottomNavigationItem(
     companion object{
         val bottomNavigationItems = listOf(
             BottomNavigationItem(
-                title = "Prescriptions",
+                title = "Medications",
                 selectedIcon = Icons.Filled.Home,
                 unselectedIcon = Icons.Outlined.Home,
                 hasNews = false,
