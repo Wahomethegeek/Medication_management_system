@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medapp.data.AppDatabase
 import com.example.medapp.domain.models.Patient
+import com.example.medapp.domain.models.PatientMedicationInfo
 import com.example.medapp.utils.ResultStatus
 import com.example.medapp.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +19,13 @@ class PatientsViewModel @Inject constructor(private val database: AppDatabase): 
 
     val patientsState = MutableStateFlow(
         Results<List<Patient>>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL
+        )
+    )
+    val patientsDosageState = MutableStateFlow(
+        Results<List<PatientMedicationInfo>>(
             data = null,
             message = null,
             status = ResultStatus.INITIAL
@@ -52,6 +60,17 @@ class PatientsViewModel @Inject constructor(private val database: AppDatabase): 
     fun deletePatient(patient: Patient){
         viewModelScope.launch {
             database.patientRecordDao().deletePatient(patient)
+        }
+    }
+
+    fun getPatientDosage(patientId: Long){
+        viewModelScope.launch {
+            patientsDosageState.value = Results.loading()
+            database.medicationRecordDao().getPatientMedications(patientId).catch {
+                patientsDosageState.value = Results.error(it.message.toString())
+            }.collect{
+                patientsDosageState.value = Results.success(it)
+            }
         }
     }
 }

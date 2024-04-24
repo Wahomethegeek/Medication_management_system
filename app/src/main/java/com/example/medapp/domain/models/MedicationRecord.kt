@@ -12,6 +12,12 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["patientId"],
             onDelete = ForeignKey.CASCADE
+        ),
+          ForeignKey(
+            entity = Drug::class,
+            parentColumns = ["id"],
+            childColumns = ["drugId"],
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
@@ -20,6 +26,7 @@ data class MedicationRecord(
     val id: Long?,
     val patientId: Long,
     val drugName: String,
+    val drugId: Long,
     val dosage: String,
     val instructions: String,
     val prescriptionDate: String,
