@@ -262,6 +262,7 @@ fun UpdateMedicationDialog(
                             prescriptionDate = prescriptionDate,
                             patientId = selectedPatient.value!!.id!!.toLong(),
                             instructions = instructions,
+                            drugId = selectedDrug.value!!.id!!
                         ),
 
                         )

@@ -261,7 +261,8 @@ fun AddPrescriptionPage(navController: NavController){
                                 status = "Active",
                                 drugName = selectedDrug.value!!.name,
                                 instructions = instructions,
-                                prescriptionDate = prescriptionDate
+                                prescriptionDate = prescriptionDate,
+                                drugId = selectedDrug.value!!.id!!
                             )
                         )
                         navController.navigateUp()

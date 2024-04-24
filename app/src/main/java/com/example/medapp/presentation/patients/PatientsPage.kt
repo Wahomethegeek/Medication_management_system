@@ -44,61 +44,77 @@ fun PatientsPage(navController: NavController) {
 
 
     selectedPatient?.let { patient ->
-        UpdatePatientDialog(patient = patient, onclickUpdate ={pat ->
+        UpdatePatientDialog(patient = patient, onclickUpdate = { pat ->
             patientsViewModel.updatePatient(pat)
             selectedPatient = null
             Toast.makeText(context, "Patient updated successfully", Toast.LENGTH_SHORT).show()
-        }, onDismiss = {selectedPatient = null} )
+        }, onDismiss = { selectedPatient = null })
     }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(title = { Text(text = "Patients") })
         },
         floatingActionButton = {
-            FloatingActionButton(shape = CircleShape, onClick = { navController.navigate(Screen.AddPatientScreen.route) }) {
+            FloatingActionButton(
+                shape = CircleShape,
+                onClick = { navController.navigate(Screen.AddPatientScreen.route) }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Patient")
             }
         }
     ) { paddingValues ->
-        
-        when(patientsState.status){
-            ResultStatus.INITIAL , ResultStatus.LOADING ->  {
-                Box(modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(), contentAlignment = Alignment.Center) {
+
+        when (patientsState.status) {
+            ResultStatus.INITIAL, ResultStatus.LOADING -> {
+                Box(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize(), contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
                 }
             }
+
             ResultStatus.SUCCESS -> {
-                if(patientsState.data.isNullOrEmpty()){
-                    Box(modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxSize(), contentAlignment = Alignment.Center) {
+                if (patientsState.data.isNullOrEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .fillMaxSize(), contentAlignment = Alignment.Center
+                    ) {
                         Text(text = "Use the + icon to add a patient")
                     }
-                }else{
+                } else {
                     LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                       items( patientsState.data){patient ->
+                        items(patientsState.data) { patient ->
                             PatientInfo(patient = patient,
-                                onUpdate = {pat ->
+                                onUpdate = { pat ->
                                     selectedPatient = pat
                                 },
                                 onDelete = { pat ->
-                                Toast.makeText(context, "Patient deleted successfully", Toast.LENGTH_SHORT).show()
-                                patientsViewModel.deletePatient(pat)
-                            })
+                                    Toast.makeText(
+                                        context,
+                                        "Patient deleted successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    patientsViewModel.deletePatient(pat)
+                                },
+                                onClick = {pat -> navController.navigate(Screen.PatientDosageScreen.withArgs("${pat.name}/${pat.id?.toLong()}"))}
+                                )
                         }
                     }
                 }
             }
+
             ResultStatus.ERROR -> {
-                Box(modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize(), contentAlignment = Alignment.Center
+                ) {
                     Text(text = patientsState.message.toString())
                 }
             }
-            
+
         }
     }
 }
