@@ -1,6 +1,5 @@
-package com.example.medapp.presentation
+package com.example.medapp.presentation.patients
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,14 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medapp.domain.models.Patient
-import com.example.medapp.ui.theme.OrangeColor6
 
 @Composable
-fun PatientInfo(patient: Patient, onDelete: (Patient) -> Unit){
+fun PatientInfo(patient: Patient, onDelete: (Patient) -> Unit, onUpdate: (Patient) -> Unit, ){
     Card(
             modifier = Modifier
                 .padding(10.dp)
@@ -62,21 +59,11 @@ fun PatientInfo(patient: Patient, onDelete: (Patient) -> Unit){
             IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(patient)}) {
                 Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
             }
-            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { onUpdate.invoke(patient) }) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
             }
         }
     }
-}
-@Preview
-@Composable
-fun PreviewPatientItem(){
-    val patientInfo = Patient(
-        id = 123,
-        name = "Wahome",
-        birthDate = "2000-08-23",
-        phoneNo = "0719196535",
-        email = "kenwahome99@gmail.com"
-    )
-    PatientInfo(patient = patientInfo, onDelete = {})
+
+
 }

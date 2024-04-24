@@ -23,7 +23,7 @@ import com.example.medapp.domain.models.Drug
 import com.example.medapp.domain.models.Patient
 
 @Composable
-fun DrugInfo(drug: Drug, onDelete: (Drug) -> Unit){
+fun DrugInfo(drug: Drug, onDelete: (Drug) -> Unit, onEdit: (Drug) -> Unit){
     Card(
         modifier = Modifier
             .padding(10.dp)
@@ -59,7 +59,7 @@ fun DrugInfo(drug: Drug, onDelete: (Drug) -> Unit){
             IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(drug)}) {
                 Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
             }
-            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { onEdit.invoke(drug)}) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
             }
         }

@@ -24,8 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.medapp.domain.viewmodels.MedicationRecordViewModel
-import com.example.medapp.presentation.MedicationRecordItem
-import com.example.medapp.presentation.PatientInfo
 import com.example.medapp.presentation.navigation.Screen
 import com.example.medapp.utils.ResultStatus
 
