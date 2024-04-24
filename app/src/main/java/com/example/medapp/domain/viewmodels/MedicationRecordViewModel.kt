@@ -1,38 +1,54 @@
 package com.example.medapp.domain.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medapp.data.local.entities.MedicationEntity
-import com.example.medapp.data.local.repository.MedicationRecordRepository
+import com.example.medapp.data.AppDatabase
+import com.example.medapp.domain.models.Drug
+import com.example.medapp.domain.models.MedicationRecord
+import com.example.medapp.utils.ResultStatus
+import com.example.medapp.utils.Results
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MedicationRecordViewModel @Inject constructor(private val repository: MedicationRecordRepository) : ViewModel() {
+class MedicationRecordViewModel @Inject constructor(private val database: AppDatabase) : ViewModel() {
 
-    private val _addMedicationRecordResult = MutableLiveData<Boolean>()
-    val addMedicationRecordResult: LiveData<Boolean>
-        get() = _addMedicationRecordResult
+    val medicationState = MutableStateFlow(
+        Results<List<MedicationRecord>>(
+            data = null,
+            message = null,
+            status = ResultStatus.INITIAL
+        )
+    )
 
-    // CRUD using repository methods
-    fun addMedicationRecord(medicationRecord: MedicationEntity){
-        viewModelScope.launch {
-            try {
-                repository.addMedicationRecord(medicationRecord)
-                _addMedicationRecordResult.value = true // If success set to true
-            } catch (e: Exception){
-                _addMedicationRecordResult.value = false // set to false if there is an error
-            }
-
-        }
-
+    init {
+        getMedicationRecord()
     }
 
-    // other crud operations
+    private fun getMedicationRecord() {
+        viewModelScope.launch {
+            medicationState.value = Results.loading()
+            database.medicationRecordDao().getAllRecords().catch {
+                medicationState.value = Results.error(it.message.toString())
+            }.collect{
+                medicationState.value = Results.success(it)
+            }
+        }
+    }
 
+    fun addMedicationRecord(medicationRecord: MedicationRecord ){
+        viewModelScope.launch {
+            database.medicationRecordDao().addMedicationRecord(medicationRecord)
+        }
+    }
 
+    fun deleteMedication(medicationRecord: MedicationRecord){
+        viewModelScope.launch {
+            database.medicationRecordDao().deleteRecord(medicationRecord)
+        }
+    }
 }
 

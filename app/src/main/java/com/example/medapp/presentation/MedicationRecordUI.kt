@@ -3,8 +3,12 @@ package com.example.medapp.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,51 +17,51 @@ import com.example.medapp.domain.models.MedicationRecord
 import com.example.medapp.ui.theme.blueColor1
 
 @Composable
-fun MedicationRecordItem(medicationRecord: MedicationRecord){
+fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (MedicationRecord) -> Unit){
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth()
-            .background(color = blueColor1),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ){
-        Column (
-            modifier = Modifier.padding(16.dp)
-        ){
-            Text(
-                text = "Medication ID: ${medicationRecord.medicationId}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Patient ID: ${medicationRecord.patientId}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Drug Name: ${medicationRecord.drugName}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Dosage: ${medicationRecord.dosage}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Instructions: ${medicationRecord.instructions}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Prescription Date: ${medicationRecord.prescriptionDate}",
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Status: ${medicationRecord.status}",
-                color = Color.White
-            )
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier.padding(10.dp)
+            ) {
+                Text(
+                    text = "Medication ID: ${medicationRecord.id}",
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Patient ID: ${medicationRecord.patientId}",
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Drug Name: ${medicationRecord.drugName}",
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Dosage: ${medicationRecord.dosage}",
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Instructions: ${medicationRecord.instructions}",
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Prescription Date: ${medicationRecord.prescriptionDate}",
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Status: ${medicationRecord.status}",
+                )
+            }
+            IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(medicationRecord)}) {
+              Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
+            }
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+                Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
+            }
         }
     }
 }
@@ -65,7 +69,7 @@ fun MedicationRecordItem(medicationRecord: MedicationRecord){
 @Composable
 fun PreviewMedicationItem(){
     val medicationRecord = MedicationRecord(
-        medicationId = 1,
+        id = 1,
         patientId = 123,
         drugName = "Panadols",
         dosage = "10 mg",
@@ -74,5 +78,5 @@ fun PreviewMedicationItem(){
         status = "Active"
         
     )
-    MedicationRecordItem(medicationRecord = medicationRecord)
+    MedicationRecordItem(medicationRecord = medicationRecord, onDelete = {})
 }
