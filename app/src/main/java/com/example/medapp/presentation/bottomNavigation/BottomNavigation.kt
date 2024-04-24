@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -21,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.medapp.domain.models.BottomNavigationItem
 import com.example.medapp.presentation.drugs.DrugsPage
-import com.example.medapp.presentation.prescription.PrescriptionPage
+import com.example.medapp.presentation.medication.PrescriptionPage
 import com.example.medapp.presentation.patients.PatientsPage
 
 @Composable

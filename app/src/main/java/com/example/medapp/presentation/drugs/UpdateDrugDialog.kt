@@ -44,7 +44,6 @@ fun UpdateDrugDialog(
     onclickUpdate: (Drug) -> Unit,
     onDismiss: (Drug) -> Unit
 ) {
-    val context = LocalContext.current
     var name by remember { mutableStateOf(drug.name) }
     var expiryDate by remember { mutableStateOf(drug.expiryDate) }
     var quantity by remember { mutableStateOf(drug.quantity.toString()) }
@@ -183,6 +182,4 @@ fun UpdateDrugDialog(
             }
 
         })
-
-
 }

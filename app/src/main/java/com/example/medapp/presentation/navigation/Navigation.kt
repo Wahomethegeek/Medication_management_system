@@ -7,10 +7,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.medapp.presentation.bottomNavigation.BottomNavigation
 import com.example.medapp.presentation.drugs.AddDrugsPage
 import com.example.medapp.presentation.drugs.DrugsPage
-import com.example.medapp.presentation.prescription.PrescriptionPage
+import com.example.medapp.presentation.medication.PrescriptionPage
 import com.example.medapp.presentation.patients.AddPatientsPage
 import com.example.medapp.presentation.patients.PatientsPage
-import com.example.medapp.presentation.prescription.AddPrescriptionPage
+import com.example.medapp.presentation.medication.AddPrescriptionPage
 
 @Composable
 fun Navigation() {

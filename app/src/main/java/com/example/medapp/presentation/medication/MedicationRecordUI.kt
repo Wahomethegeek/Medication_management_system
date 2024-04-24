@@ -1,4 +1,4 @@
-package com.example.medapp.presentation.prescription
+package com.example.medapp.presentation.medication
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.medapp.domain.models.MedicationRecord
 
 @Composable
-fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (MedicationRecord) -> Unit){
+fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (MedicationRecord) -> Unit, onEdit: (MedicationRecord) -> Unit){
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -56,24 +56,9 @@ fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (Medicati
             IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(medicationRecord)}) {
               Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
             }
-            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { onEdit.invoke(medicationRecord) }) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
             }
         }
     }
-}
-@Preview
-@Composable
-fun PreviewMedicationItem(){
-    val medicationRecord = MedicationRecord(
-        id = 1,
-        patientId = 123,
-        drugName = "Panadols",
-        dosage = "10 mg",
-        instructions = "Take twice daily",
-        prescriptionDate = "2024-04-22",
-        status = "Active"
-        
-    )
-    MedicationRecordItem(medicationRecord = medicationRecord, onDelete = {})
 }
