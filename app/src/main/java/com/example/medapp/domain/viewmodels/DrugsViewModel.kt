@@ -49,4 +49,10 @@ class DrugsViewModel @Inject constructor(private  val database: AppDatabase): Vi
             database.drugsRecordDao().deleteDrug(drug)
         }
     }
+
+    fun updateDrug(drug: Drug){
+        viewModelScope.launch {
+            database.drugsRecordDao().updateDrug(drug = drug)
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.medapp.presentation.drugs
+package com.example.medapp.presentation.medication
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -27,48 +27,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.medapp.domain.models.Drug
-import com.example.medapp.domain.viewmodels.DrugsViewModel
-import com.example.medapp.presentation.common.DrugInfo
+import com.example.medapp.domain.models.MedicationRecord
+import com.example.medapp.domain.viewmodels.MedicationRecordViewModel
 import com.example.medapp.presentation.navigation.Screen
 import com.example.medapp.utils.ResultStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrugsPage(navController: NavController) {
-    val drugsViewModel = hiltViewModel<DrugsViewModel>()
-    val drugsState = drugsViewModel.drugsState.collectAsState().value
+fun PrescriptionPage(navController: NavController) {
+    val medicationViewModel = hiltViewModel<MedicationRecordViewModel>()
+    val medicationState = medicationViewModel.medicationState.collectAsState().value
+    var selectedMedicalRecord by remember {
+        mutableStateOf<MedicationRecord?>(null)
+    }
     val context = LocalContext.current
-    var selectedDrug by remember { mutableStateOf<Drug?>(null) }
 
-        selectedDrug?.let { dr ->
-            UpdateDrugDialog(drug = dr, onclickUpdate = { drug ->
-                drugsViewModel.updateDrug(drug)
-                selectedDrug = null
-                Toast.makeText(context, "Drug updated successfully", Toast.LENGTH_SHORT)
-                    .show()
-            }, onDismiss = {
-                selectedDrug = null
-            })
-        }
-
-
+    selectedMedicalRecord?.let { record ->
+        UpdateMedicationDialog(medicationRecord = record, onclickUpdate = { rec ->
+            medicationViewModel.updateMedicationRecord(rec)
+            selectedMedicalRecord = null
+        }, onDismiss = { selectedMedicalRecord = null })
+    }
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = "Drugs") })
+            CenterAlignedTopAppBar(title = { Text(text = "Medications") })
         },
         floatingActionButton = {
             FloatingActionButton(
                 shape = CircleShape,
-                onClick = { navController.navigate(Screen.AddDrugsScreen.route) }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add drug")
+                onClick = { navController.navigate(Screen.AddPrescriptionScreen.route) }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Medication")
             }
         }
     ) { paddingValues ->
-
-
-        when (drugsState.status) {
+        when (medicationState.status) {
             ResultStatus.INITIAL, ResultStatus.LOADING -> {
                 Box(
                     modifier = Modifier
@@ -80,29 +73,26 @@ fun DrugsPage(navController: NavController) {
             }
 
             ResultStatus.SUCCESS -> {
-                if (drugsState.data.isNullOrEmpty()) {
+                if (medicationState.data.isNullOrEmpty()) {
                     Box(
                         modifier = Modifier
                             .padding(paddingValues)
                             .fillMaxSize(), contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "Use the + icon to add a drug")
+                        Text(text = "Use the + icon to add a medication")
                     }
                 } else {
                     LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                        items(drugsState.data) { drug ->
-                            DrugInfo(drug = drug,
-                                onEdit = { dr ->
-                                    selectedDrug = dr
-                                },
-                                onDelete = { dr ->
-                                    drugsViewModel.deleteDrug(dr)
+                        items(medicationState.data) { record ->
+                            MedicationRecordItem(record,
+                                onEdit = { selectedMedicalRecord = it },
+                                onDelete = { medication ->
                                     Toast.makeText(
                                         context,
-                                        "Drug deleted successfully",
+                                        "Medication deleted successfully",
                                         Toast.LENGTH_SHORT
                                     ).show()
-
+                                    medicationViewModel.deleteMedication(medication)
                                 })
                         }
                     }
@@ -115,7 +105,7 @@ fun DrugsPage(navController: NavController) {
                         .padding(paddingValues)
                         .fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
-                    Text(text = drugsState.message.toString())
+                    Text(text = medicationState.message.toString())
                 }
             }
 

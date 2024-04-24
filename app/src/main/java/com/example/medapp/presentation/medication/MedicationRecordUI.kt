@@ -1,6 +1,5 @@
-package com.example.medapp.presentation
+package com.example.medapp.presentation.medication
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,14 +9,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medapp.domain.models.MedicationRecord
-import com.example.medapp.ui.theme.blueColor1
 
 @Composable
-fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (MedicationRecord) -> Unit){
+fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (MedicationRecord) -> Unit, onEdit: (MedicationRecord) -> Unit){
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -59,24 +56,9 @@ fun MedicationRecordItem(medicationRecord: MedicationRecord, onDelete: (Medicati
             IconButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = { onDelete.invoke(medicationRecord)}) {
               Icon(imageVector = Icons.Filled.Delete, contentDescription ="Delete", tint = MaterialTheme.colorScheme.error )
             }
-            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { }) {
+            IconButton(modifier = Modifier.align(Alignment.TopEnd), onClick = { onEdit.invoke(medicationRecord) }) {
                 Icon(imageVector = Icons.Filled.Edit, contentDescription ="Edit" )
             }
         }
     }
-}
-@Preview
-@Composable
-fun PreviewMedicationItem(){
-    val medicationRecord = MedicationRecord(
-        id = 1,
-        patientId = 123,
-        drugName = "Panadols",
-        dosage = "10 mg",
-        instructions = "Take twice daily",
-        prescriptionDate = "2024-04-22",
-        status = "Active"
-        
-    )
-    MedicationRecordItem(medicationRecord = medicationRecord, onDelete = {})
 }

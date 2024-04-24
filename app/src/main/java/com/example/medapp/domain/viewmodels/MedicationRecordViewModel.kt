@@ -44,6 +44,11 @@ class MedicationRecordViewModel @Inject constructor(private val database: AppDat
             database.medicationRecordDao().addMedicationRecord(medicationRecord)
         }
     }
+    fun updateMedicationRecord(medicationRecord: MedicationRecord ){
+        viewModelScope.launch {
+            database.medicationRecordDao().updateRecord(medicationRecord)
+        }
+    }
 
     fun deleteMedication(medicationRecord: MedicationRecord){
         viewModelScope.launch {

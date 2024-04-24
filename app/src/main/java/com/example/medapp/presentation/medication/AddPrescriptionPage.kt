@@ -1,4 +1,4 @@
-package com.example.medapp.presentation.prescription
+package com.example.medapp.presentation.medication
 
 import android.widget.Toast
 import androidx.compose.foundation.border
