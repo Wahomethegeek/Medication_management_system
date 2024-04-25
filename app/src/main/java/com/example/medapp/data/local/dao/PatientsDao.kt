@@ -15,6 +15,8 @@ interface PatientsDao {
     suspend fun insertPatient(patient: Patient)
     @Query("SELECT * FROM patient ORDER BY id DESC")
     fun getAllProducts(): Flow<List<Patient>>
+    @Query("SELECT * FROM patient WHERE email LIKE '%' || :searchTerm || '%' OR name LIKE '%' || :searchTerm || '%' OR phoneNo LIKE '%' || :searchTerm || '%' ORDER BY id DESC")
+    fun searchPatient(searchTerm: String): Flow<List<Patient>>
     @Update
     suspend fun updatePatient(patient: Patient)
     @Delete

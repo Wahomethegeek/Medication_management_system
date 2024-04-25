@@ -9,11 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.medapp.domain.models.MedicationRecord
 import com.example.medapp.domain.viewmodels.MedicationRecordViewModel
+import com.example.medapp.presentation.common.AppSearchBar
 import com.example.medapp.presentation.navigation.Screen
 import com.example.medapp.utils.ResultStatus
 
@@ -49,9 +53,53 @@ fun PrescriptionPage(navController: NavController) {
         }, onDismiss = { selectedMedicalRecord = null })
     }
 
+    var showSearchBox by remember {
+        mutableStateOf(false)
+    }
+    var searchTerm by remember {
+        mutableStateOf("")
+    }
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = "Medications") })
+            CenterAlignedTopAppBar(title = {
+                if (showSearchBox) {
+                    AppSearchBar(
+                        placeholder = "Search Medication",
+                        value = searchTerm,
+                        onValueChange = { search ->
+                            searchTerm = search
+                            medicationViewModel.searchMedicationRecord(searchTerm)
+                        },
+                        onSearch = {
+                            medicationViewModel.searchMedicationRecord(searchTerm)
+                        }
+                    )
+                } else {
+                    Text(text = "Drugs")
+                }
+            }, actions = {
+                IconButton(
+
+                    onClick = {
+
+                        if (showSearchBox) {
+                            searchTerm = ""
+                            medicationViewModel.getMedicationRecord()
+                        }
+                        showSearchBox = !showSearchBox
+                    }) {
+                    Icon(
+                        imageVector =
+                        if (showSearchBox) {
+                            Icons.Default.Close
+                        } else {
+                            Icons.Default.Search
+                        }, contentDescription = "Search"
+                    )
+
+                }
+            })
+
         },
         floatingActionButton = {
             FloatingActionButton(

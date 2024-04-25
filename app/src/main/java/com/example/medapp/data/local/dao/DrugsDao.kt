@@ -15,6 +15,9 @@ interface DrugsDao {
     suspend fun insertDrug(drug: Drug)
     @Query("SELECT * FROM Drugs ORDER BY id DESC")
     fun getAllDrugs(): Flow<List<Drug>>
+
+    @Query("SELECT * FROM Drugs WHERE name LIKE '%' || :searchTerm || '%' OR quantity LIKE '%' || :searchTerm || '%' OR expiryDate LIKE '%' || :searchTerm || '%' ORDER BY id DESC")
+    fun searchDrug(searchTerm: String): Flow<List<Drug>>
     @Update
     suspend fun updateDrug(drug:Drug)
     @Delete

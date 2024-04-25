@@ -36,7 +36,7 @@ class PatientsViewModel @Inject constructor(private val database: AppDatabase): 
         getPatients()
     }
 
-    private fun getPatients() {
+     fun getPatients() {
         viewModelScope.launch {
             patientsState.value = Results.loading()
             database.patientRecordDao().getAllProducts().catch {
@@ -70,6 +70,16 @@ class PatientsViewModel @Inject constructor(private val database: AppDatabase): 
                 patientsDosageState.value = Results.error(it.message.toString())
             }.collect{
                 patientsDosageState.value = Results.success(it)
+            }
+        }
+    }
+
+    fun searchPatient(searchTerm: String){
+        viewModelScope.launch {
+            database.patientRecordDao().searchPatient(searchTerm).catch {
+                patientsState.value = Results.error(it.message.toString())
+            }.collect{
+                patientsState.value = Results.success(it)
             }
         }
     }

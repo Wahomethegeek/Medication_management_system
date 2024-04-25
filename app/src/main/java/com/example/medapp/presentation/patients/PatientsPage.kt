@@ -9,11 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.medapp.domain.models.Patient
 import com.example.medapp.domain.viewmodels.PatientsViewModel
+import com.example.medapp.presentation.common.AppSearchBar
 import com.example.medapp.presentation.navigation.Screen
 import com.example.medapp.utils.ResultStatus
 
@@ -37,12 +41,13 @@ import com.example.medapp.utils.ResultStatus
 fun PatientsPage(navController: NavController) {
     val patientsViewModel = hiltViewModel<PatientsViewModel>()
     val patientsState = patientsViewModel.patientsState.collectAsState().value
+
+
+
     var selectedPatient by remember {
         mutableStateOf<Patient?>(null)
     }
     val context = LocalContext.current
-
-
     selectedPatient?.let { patient ->
         UpdatePatientDialog(patient = patient, onclickUpdate = { pat ->
             patientsViewModel.updatePatient(pat)
@@ -50,9 +55,53 @@ fun PatientsPage(navController: NavController) {
             Toast.makeText(context, "Patient updated successfully", Toast.LENGTH_SHORT).show()
         }, onDismiss = { selectedPatient = null })
     }
+
+    var showSearchBox by remember {
+        mutableStateOf(false)
+    }
+    var searchTerm by remember {
+        mutableStateOf("")
+    }
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = "Patients") })
+            CenterAlignedTopAppBar(title = {
+                if (showSearchBox) {
+                    AppSearchBar(
+                        placeholder = "Search Patient",
+                        value = searchTerm,
+                        onValueChange = { search ->
+                            searchTerm = search
+                            patientsViewModel.searchPatient(searchTerm)
+                        },
+                        onSearch = {
+                            patientsViewModel.searchPatient(searchTerm)
+                        }
+                    )
+                } else {
+                    Text(text = "Patients")
+                }
+            }, actions = {
+                IconButton(
+
+                    onClick = {
+
+                    if (showSearchBox) {
+                        searchTerm = ""
+                        patientsViewModel.getPatients()
+                    }
+                    showSearchBox = !showSearchBox
+                }) {
+                    Icon(imageVector =
+                    if (showSearchBox) {
+                        Icons.Default.Close
+                    } else {
+                        Icons.Default.Search
+                    }
+                        , contentDescription = "Search" )
+
+                }
+            })
+
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -98,8 +147,14 @@ fun PatientsPage(navController: NavController) {
                                     ).show()
                                     patientsViewModel.deletePatient(pat)
                                 },
-                                onClick = {pat -> navController.navigate(Screen.PatientDosageScreen.withArgs("${pat.name}/${pat.id?.toLong()}"))}
-                                )
+                                onClick = { pat ->
+                                    navController.navigate(
+                                        Screen.PatientDosageScreen.withArgs(
+                                            "${pat.name}/${pat.id?.toLong()}"
+                                        )
+                                    )
+                                }
+                            )
                         }
                     }
                 }

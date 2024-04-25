@@ -9,11 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.medapp.domain.models.Drug
 import com.example.medapp.domain.viewmodels.DrugsViewModel
+import com.example.medapp.presentation.common.AppSearchBar
 import com.example.medapp.presentation.common.DrugInfo
 import com.example.medapp.presentation.navigation.Screen
 import com.example.medapp.utils.ResultStatus
@@ -41,22 +45,65 @@ fun DrugsPage(navController: NavController) {
     val context = LocalContext.current
     var selectedDrug by remember { mutableStateOf<Drug?>(null) }
 
-        selectedDrug?.let { dr ->
-            UpdateDrugDialog(drug = dr, onclickUpdate = { drug ->
-                drugsViewModel.updateDrug(drug)
-                selectedDrug = null
-                Toast.makeText(context, "Drug updated successfully", Toast.LENGTH_SHORT)
-                    .show()
-            }, onDismiss = {
-                selectedDrug = null
-            })
-        }
+    selectedDrug?.let { dr ->
+        UpdateDrugDialog(drug = dr, onclickUpdate = { drug ->
+            drugsViewModel.updateDrug(drug)
+            selectedDrug = null
+            Toast.makeText(context, "Drug updated successfully", Toast.LENGTH_SHORT)
+                .show()
+        }, onDismiss = {
+            selectedDrug = null
+        })
+    }
 
 
-
+    var showSearchBox by remember {
+        mutableStateOf(false)
+    }
+    var searchTerm by remember {
+        mutableStateOf("")
+    }
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = "Drugs") })
+            CenterAlignedTopAppBar(title = {
+                if (showSearchBox) {
+                    AppSearchBar(
+                        placeholder = "Search Drug",
+                        value = searchTerm,
+                        onValueChange = { search ->
+                            searchTerm = search
+                            drugsViewModel.searchDrug(searchTerm)
+                        },
+                        onSearch = {
+                            drugsViewModel.searchDrug(searchTerm)
+                        }
+                    )
+                } else {
+                    Text(text = "Drugs")
+                }
+            }, actions = {
+                IconButton(
+
+                    onClick = {
+
+                        if (showSearchBox) {
+                            searchTerm = ""
+                            drugsViewModel.getDrugs()
+                        }
+                        showSearchBox = !showSearchBox
+                    }) {
+                    Icon(
+                        imageVector =
+                        if (showSearchBox) {
+                            Icons.Default.Close
+                        } else {
+                            Icons.Default.Search
+                        }, contentDescription = "Search"
+                    )
+
+                }
+            })
+
         },
         floatingActionButton = {
             FloatingActionButton(
