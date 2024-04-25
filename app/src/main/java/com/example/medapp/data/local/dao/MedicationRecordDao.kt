@@ -18,6 +18,9 @@ interface MedicationRecordDao {
     @Query("SELECT * FROM medication_records ORDER BY id DESC")
     fun getAllRecords(): Flow<List<MedicationRecord>>
 
+    @Query("SELECT * FROM medication_records WHERE dosage LIKE '%' || :searchTerm || '%' OR drugName LIKE '%' || :searchTerm || '%' OR dosage LIKE '%' || :searchTerm || '%' OR patientId LIKE '%' || :searchTerm || '%' ORDER BY id DESC")
+    fun searchRecord(searchTerm : String): Flow<List<MedicationRecord>>
+
     @Query("""
         SELECT p.name, p.birthDate, p.phoneNo, p.email, 
                m.dosage, m.instructions, m.prescriptionDate, m.status, 

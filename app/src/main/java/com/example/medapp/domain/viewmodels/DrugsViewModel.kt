@@ -27,10 +27,19 @@ class DrugsViewModel @Inject constructor(private  val database: AppDatabase): Vi
         getDrugs()
     }
 
-    private fun getDrugs() {
+     fun getDrugs() {
         viewModelScope.launch {
             drugsState.value = Results.loading()
             database.drugsRecordDao().getAllDrugs().catch {
+                drugsState.value = Results.error(it.message.toString())
+            }.collect{
+                drugsState.value = Results.success(it)
+            }
+        }
+    }
+     fun searchDrug(searchTerm: String) {
+        viewModelScope.launch {
+            database.drugsRecordDao().searchDrug(searchTerm).catch {
                 drugsState.value = Results.error(it.message.toString())
             }.collect{
                 drugsState.value = Results.success(it)
