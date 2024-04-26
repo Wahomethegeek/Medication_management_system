@@ -75,7 +75,7 @@ fun PrescriptionPage(navController: NavController) {
                         }
                     )
                 } else {
-                    Text(text = "Drugs")
+                    Text(text = "Medication")
                 }
             }, actions = {
                 IconButton(
